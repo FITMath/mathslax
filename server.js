@@ -2,6 +2,7 @@ var Express = require('express');
 var BodyParser = require('body-parser');
 var Jade = require('jade');
 var Typeset = require('./typeset.js');
+var _ = require('underscore');
 var util = require('util');
 
 var SERVER = process.env.SERVER || '127.0.0.1';
@@ -13,6 +14,18 @@ router.get('/', function(req, res) {
   res.send('');
   res.end();
 });
+
+var slackImages = function(mo) {
+  if (mo.output === null) {
+    return {
+        fallback: mo.input
+    }
+  }
+  return {
+    image_url: mo.output
+  }
+};
+
 router.post('/typeset', function(req, res) {
   var cd = new Date();
   var requestString = req.body.text;
@@ -28,15 +41,10 @@ router.post('/typeset', function(req, res) {
   var promiseSuccess = function(mathObjects) {
     var locals = {'mathObjects': mathObjects,
                   'serverAddress': util.format('http://%s:%s/', SERVER, PORT)};
-    var htmlResult = Jade.renderFile('./views/slack-response.jade', locals);
     let data = {
     response_type: 'in_channel', // public to the channel
-    text: requestString,
-    attachments:[
-            {
-            image_url: 'https://http.cat/302.jpg'
-            }
-        ]
+    fallback: requestString,
+    attachments: _.map(mathObjects, slackImages)
     };
     console.log(data);
     res.json({'text' : htmlResult});
