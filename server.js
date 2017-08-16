@@ -10,17 +10,18 @@ var PORT = process.env.PORT || '8080';
 // Install the routes.
 var router = Express.Router();
 router.get('/', function(req, res) {
-  res.json(['Hello', 'World', {underDevelopment: true}]);
+  res.send('');
+  res.end();
 });
 router.post('/typeset', function(req, res) {
   var cd = new Date();
   var requestString = req.body.text;
   var bpr = 'math\\!';
   console.log(cd + ":" + requestString);
-  console.log( " going to send "+bpr );
-  var typesetPromise = Typeset.typeset(requestString,bpr);
+  console.log( " going to send " + bpr );
+  var typesetPromise = Typeset.typeset(requestString, bpr);
   if (typesetPromise === null) {
-    res.send('no text found to typeset');
+    res.send('no text found to typeset. Make sure to prefix your message with ' + );
     res.end(); // Empty 200 response -- no text was found to typeset.
     return;
   }
@@ -28,30 +29,17 @@ router.post('/typeset', function(req, res) {
     var locals = {'mathObjects': mathObjects,
                   'serverAddress': util.format('http://%s:%s/', SERVER, PORT)};
     var htmlResult = Jade.renderFile('./views/slack-response.jade', locals);
+    let data = {
+    response_type: 'in_channel', // public to the channel
+    text: requestString,
+    attachments:[
+            {
+            image_url: 'https://http.cat/302.jpg'
+            }
+        ]
+    };
+    console.log(data);
     res.json({'text' : htmlResult});
-    res.end();
-  };
-  var promiseError = function(error) {
-    console.log('Error in typesetting:');
-    console.log(error);
-    res.end(); // Empty 200 response.
-  };
-  typesetPromise.then(promiseSuccess, promiseError);
-});
-router.post('/slashtypeset', function(req, res) {
-  var cd = new Date();
-  var requestString = req.body.text;
-  var typesetPromise = Typeset.typeset(requestString,'');
-  if (typesetPromise === null) {
-    res.send('no text found to typeset');
-    res.end(); // Empty 200 response -- no text was found to typeset.
-    return;
-  }
-  var promiseSuccess = function(mathObjects) {
-    var locals = {'mathObjects': mathObjects,
-                  'serverAddress': util.format('http://%s:%s/', SERVER, PORT)};
-    var htmlResult = Jade.renderFile('./views/slack-slash-response.jade', locals);
-    res.send(htmlResult);
     res.end();
   };
   var promiseError = function(error) {
