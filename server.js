@@ -3,6 +3,8 @@ var BodyParser = require('body-parser');
 var Typeset = require('./typeset.js');
 var _ = require('underscore');
 var util = require('util');
+var Slack = require('node-slack');
+var slack = new Slack();
 
 var SERVER = process.env.SERVER || '127.0.0.1';
 var PORT = process.env.PORT || '8080';
@@ -36,14 +38,16 @@ router.post('/typeset', function(req, res) {
     return;
   }
   var promiseSuccess = function(mathObjects) {
-    let data = {
+    let reply = slack.respond(req.body, function(hook){
+    return {
         response_type: 'in_channel', // public to the channel
         fallback: requestString,
         attachments: _.map(mathObjects, slackImages)
-    };
-    res.json(data);
+        };
+    });
     console.log('Responding with: ');
     console.log(data);
+    res.json(data);
     res.end();
   };
   var promiseError = function(error) {

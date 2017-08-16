@@ -27,8 +27,9 @@ var renderMath = function(mathObject) {
     format: 'TeX',
     png: true,
     font: 'TeX',
+    ex: 6,
     width: 600,
-    scale: 2,
+    scale: 1,
     linebreaks: true,
   };
 
