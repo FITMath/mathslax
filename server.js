@@ -38,13 +38,11 @@ router.post('/typeset', function(req, res) {
     return;
   }
   var promiseSuccess = function(mathObjects) {
-    let reply = slack.respond(req.body, function(hook){
-    return {
+    let data = {
         response_type: 'in_channel', // public to the channel
         fallback: requestString,
         attachments: _.map(mathObjects, slackImages)
         };
-    });
     console.log('Responding with: ');
     console.log(data);
     res.json(data);
