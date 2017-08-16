@@ -7,6 +7,6 @@
         "body-parser": "1.0.2",
         "express": "4.0.0",
         "q": "1.0.1",
-        "underscore": "1.7.0",
+        "underscore": "1.7.0"
     }
 }

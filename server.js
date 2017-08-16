@@ -3,14 +3,13 @@ var BodyParser = require('body-parser');
 var Typeset = require('./typeset.js');
 var _ = require('underscore');
 var util = require('util');
-var Slack = require('node-slack');
-var slack = new Slack();
 
 var SERVER = process.env.SERVER || '127.0.0.1';
 var PORT = process.env.PORT || '8080';
 
 // Install the routes.
 var router = Express.Router();
+
 router.get('/', function(req, res) {
   res.end();
 });
