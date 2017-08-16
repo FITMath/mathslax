@@ -42,6 +42,8 @@ router.post('/typeset', function(req, res) {
         attachments: _.map(mathObjects, slackImages)
     };
     res.json(data);
+    console.log('Responding with: ');
+    console.log(data);
     res.end();
   };
   var promiseError = function(error) {

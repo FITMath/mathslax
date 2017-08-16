@@ -45,6 +45,8 @@ var renderMath = function(mathObject) {
     if (!fs.existsSync(filepath)) {
       console.log('writing new PNG: %s', filename);
       var pngData = new Buffer(result.png.slice(22), 'base64');
+      console.log('PNG Contents: %s', result.png);
+      console.log('PNG Width: %s', result.pngWidth);
       fs.writeFile(filepath, pngData, function(error) {
         if (error) {
           mathObject.error = error;
