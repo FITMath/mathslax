@@ -5,7 +5,7 @@ var _ = require('underscore');
 var util = require('util');
 
 var SERVER = process.env.SERVER || '127.0.0.1';
-var PORT = '80';
+var PORT = process.env.PORT || '8080';
 
 // Install the routes.
 var router = Express.Router();
@@ -20,7 +20,7 @@ var slackImages = function(mo) {
     }
   }
   return {
-    image_url: util.format('http://%s:%s/%s', SERVER, PORT, mo.output)
+    image_url: util.format('http://%s/%s', SERVER, mo.output)
   }
 };
 
@@ -37,9 +37,9 @@ router.post('/typeset', function(req, res) {
   }
   var promiseSuccess = function(mathObjects) {
     let data = {
-    response_type: 'in_channel', // public to the channel
-    fallback: requestString,
-    attachments: _.map(mathObjects, slackImages)
+        response_type: 'in_channel', // public to the channel
+        fallback: requestString,
+        attachments: _.map(mathObjects, slackImages)
     };
     res.json(data);
     res.end();
@@ -61,9 +61,10 @@ app.use('/static', Express.static('static'));
 app.use('/', router);
 
 app.listen(PORT);
-console.log("Mathslax is listening at http://%s:%s/", SERVER, PORT);
+console.log()
+console.log("Mathslax is listening at %s", SERVER);
 console.log("Make a test request with something like:");
-console.log("curl -v -X POST '%s:%d/typeset' --data " +
+console.log("curl -v -X POST '%s/typeset' --data " +
             "'{\"text\": \"math! f(x) = x^2/sin(x) * E_0\"}' " +
-            "-H \"Content-Type: application/json\"", SERVER, PORT);
+            "-H \"Content-Type: application/json\"", SERVER);
 console.log('___________\n');
