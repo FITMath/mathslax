@@ -24,10 +24,11 @@ var extractRawMath = function(text, prefix) {
 var renderMath = function(mathObject, parseOptions) {
   var defaultOptions = {
     math: mathObject.input,
-    format: 'AsciiMath',
+    format: 'TeX',
     png: true,
     font: 'TeX',
     width: 600,
+    scale: 2,
     linebreaks: true,
   };
   var typesetOptions = _.extend(defaultOptions, parseOptions);

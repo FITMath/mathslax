@@ -21,7 +21,7 @@ router.post('/typeset', function(req, res) {
   console.log( " going to send " + bpr );
   var typesetPromise = Typeset.typeset(requestString, bpr);
   if (typesetPromise === null) {
-    res.send('no text found to typeset. Make sure to prefix your message with ' + );
+    res.send('no text found to typeset. Make sure to prefix your message with ' + bpr);
     res.end(); // Empty 200 response -- no text was found to typeset.
     return;
   }
