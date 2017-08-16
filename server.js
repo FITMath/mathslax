@@ -21,7 +21,9 @@ var slackImages = function(mo) {
     }
   }
   return {
-    image_url: util.format('http://%s/%s', SERVER, mo.output)
+    image_url: util.format('http://%s/%s', SERVER, mo.output.filepathPng),
+    title: mo.input,
+    title_link: util.format('http://%s/%s', SERVER, mo.output.filepathSvg)
   }
 };
 
@@ -39,7 +41,6 @@ router.post('/typeset', function(req, res) {
   var promiseSuccess = function(mathObjects) {
     let data = {
         response_type: 'in_channel', // public to the channel
-        fallback: requestString,
         attachments: _.map(mathObjects, slackImages)
         };
     console.log('Responding with: ');

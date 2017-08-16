@@ -2,11 +2,11 @@
     "name": "mathslax",
     "main": "server.js",
     "dependencies": {
-        "mathjax-node": "1.0.0",
-        "mathjax-node-svg2png": "1.0.2",
+        "mathjax-node": "^1.0.0",
         "body-parser": "1.0.2",
         "express": "4.0.0",
         "q": "1.0.1",
-        "underscore": "1.7.0"
+        "underscore": "1.7.0",
+        "svg2png": "4.1.1"
     }
 }
