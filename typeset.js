@@ -21,8 +21,8 @@ var extractRawMath = function(text, prefix) {
   return results;
 };
 
-var renderMath = function(mathObject, parseOptions) {
-  var defaultOptions = {
+var renderMath = function(mathObject) {
+  var typesetOptions = {
     math: mathObject.input,
     format: 'TeX',
     png: true,
@@ -31,7 +31,7 @@ var renderMath = function(mathObject, parseOptions) {
     scale: 2,
     linebreaks: true,
   };
-  var typesetOptions = _.extend(defaultOptions, parseOptions);
+
   var deferred = Q.defer();
   var typesetCallback = function(result) {
     if (!result || !result.png || !!result.errors) {

@@ -1,17 +1,15 @@
 var Express = require('express');
 var BodyParser = require('body-parser');
-var Jade = require('jade');
 var Typeset = require('./typeset.js');
 var _ = require('underscore');
 var util = require('util');
 
 var SERVER = process.env.SERVER || '127.0.0.1';
-var PORT = process.env.PORT || '8080';
+var PORT = '80';
 
 // Install the routes.
 var router = Express.Router();
 router.get('/', function(req, res) {
-  res.send('');
   res.end();
 });
 
@@ -22,7 +20,7 @@ var slackImages = function(mo) {
     }
   }
   return {
-    image_url: mo.output
+    image_url: util.format('http://%s:%s/%s', SERVER, PORT, mo.output)
   }
 };
 
@@ -34,20 +32,16 @@ router.post('/typeset', function(req, res) {
   console.log( " going to send " + bpr );
   var typesetPromise = Typeset.typeset(requestString, bpr);
   if (typesetPromise === null) {
-    res.send('no text found to typeset. Make sure to prefix your message with ' + bpr);
     res.end(); // Empty 200 response -- no text was found to typeset.
     return;
   }
   var promiseSuccess = function(mathObjects) {
-    var locals = {'mathObjects': mathObjects,
-                  'serverAddress': util.format('http://%s:%s/', SERVER, PORT)};
     let data = {
     response_type: 'in_channel', // public to the channel
     fallback: requestString,
     attachments: _.map(mathObjects, slackImages)
     };
-    console.log(data);
-    res.json({'text' : htmlResult});
+    res.json(data);
     res.end();
   };
   var promiseError = function(error) {
