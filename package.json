@@ -8,6 +8,6 @@
         "express": "4.0.0",
         "q": "1.0.1",
         "underscore": "1.7.0",
-        "slack": "^6.1.0"
+        "node-slack": "0.0.6"
     }
 }
